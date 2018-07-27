@@ -34,7 +34,7 @@ public class LoggerUtil {
 	 */
 	public static void loggerError(Class clazz,String mark , Object obj) {
 		logger = LoggerFactory.getLogger(clazz);
-		logger.info(mark, obj);
+		logger.error(mark, obj);
 	}
 	
 	/**

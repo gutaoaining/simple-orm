@@ -200,6 +200,8 @@ public class DbSession{
 		    } catch (SQLException e) {
 			    rollBack();
 			    logger.error("批量更新数据出错，出错信息为：{}" , e);
-		    }
+		    }finally {
+				close();
+			}
 	}
 }

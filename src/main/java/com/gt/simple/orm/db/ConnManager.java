@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.List;
 import com.gt.simple.orm.core.DataSourceManager;
 import com.gt.simple.orm.exception.JdbcException;
+import com.gt.simple.orm.util.LoggerUtil;
 import com.zaxxer.hikari.HikariDataSource;
 
 /**
@@ -35,7 +36,7 @@ public class ConnManager {
     			connection.close();
     		}
 		} catch (Exception e) {
-			throw new JdbcException(e);
+			LoggerUtil.loggerError(ConnManager.class, "关闭数据库连接出错，错误信息为:{}", e);
 		}
     }
     
@@ -43,7 +44,7 @@ public class ConnManager {
     	try {
 			connection.setAutoCommit(false);
 		} catch (SQLException e) {
-			throw new JdbcException(e);
+			LoggerUtil.loggerError(ConnManager.class, "开启数据库连接事务出错，错误信息为:{}", e);
 		}
     }
     
@@ -51,7 +52,7 @@ public class ConnManager {
     	try {
 			connection.commit();
 		} catch (SQLException e) {
-			throw new JdbcException(e);
+			LoggerUtil.loggerError(ConnManager.class, "开启数据库连接事务出错，错误信息为:{}", e);
 		}
     }
 
@@ -59,12 +60,12 @@ public class ConnManager {
 		try {
 			connection.rollback();
 		} catch (SQLException e) {
-			throw new JdbcException(e);
+			LoggerUtil.loggerError(ConnManager.class, "数据库事务出错，错误信息为:{}", e);
 		}
 	}
 	
 	public static Statement createStatement(Connection connection) {
-		  try {
+		try {
 			return connection.createStatement();
 		} catch (SQLException e) {
 			throw new JdbcException(e);
