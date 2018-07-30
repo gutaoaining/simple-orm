@@ -181,7 +181,7 @@ public class DbSession{
 			return 0;
 	}
 	
-	public void updateBatch(String sqlId ,List<Map<String,Object>> args){
+	public int[] updateBatch(String sqlId ,List<Map<String,Object>> args){
 			beginTrans();
 			PreparedStatement preparedStatement = null;
 			SqlInfo sqlInfo = DBSqlCatch.getSqlInfo(sqlId);
@@ -195,11 +195,13 @@ public class DbSession{
 						preparedStatement.addBatch();
 					}
 			     }
-				 preparedStatement.executeBatch();
+				 int[] results = preparedStatement.executeBatch();
 				 commit();
+				 return results;
 		    } catch (SQLException e) {
 			    rollBack();
 			    logger.error("批量更新数据出错，出错信息为：{}" , e);
+			    return null;
 		    }finally {
 				close();
 			}
