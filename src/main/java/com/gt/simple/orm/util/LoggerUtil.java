@@ -3,6 +3,8 @@ package com.gt.simple.orm.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.gt.simple.orm.db.DbSession;
+
 public class LoggerUtil {
 
 	private static Logger logger;
@@ -66,5 +68,10 @@ public class LoggerUtil {
 	public static Logger getLogger(Class clazz) {
 		Logger logger = LoggerFactory.getLogger(clazz);
 		return logger;
+	}
+
+	public static void loggerdebug(Class clazz, String mark , Object obj) {
+		logger = LoggerFactory.getLogger(clazz);
+		logger.debug(mark, obj);
 	}
 }

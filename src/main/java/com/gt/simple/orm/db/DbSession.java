@@ -8,12 +8,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.gt.simple.orm.config.DBSqlCatch;
 import com.gt.simple.orm.model.DbPage;
 import com.gt.simple.orm.model.Order;
 import com.gt.simple.orm.model.SqlInfo;
+import com.gt.simple.orm.util.LoggerUtil;
 
 /**
  * 
@@ -24,8 +23,6 @@ import com.gt.simple.orm.model.SqlInfo;
 *
  */
 public class DbSession{
-	
-	private Logger logger = LoggerFactory.getLogger(DbSession.class);
 	
 	private Connection connection;
 	
@@ -44,7 +41,7 @@ public class DbSession{
 				dbType = DATASOURCETYPE.MYSQL;
 			}
 		} catch (SQLException e) {
-			logger.error("设置数据库类别出错，错误信息为：" + e);
+			LoggerUtil.loggerError(DbSession.class, "设置数据库类别出错，错误信息为：{}" ,e);
 		}
 	}
 
@@ -75,12 +72,12 @@ public class DbSession{
 
 	public List<Order> queryList(String sqlId, Map map){
 			SqlInfo sqlInfo = DBSqlCatch.getSqlInfo(sqlId , map);
-			logger.debug("获取到的sql语句：" + sqlInfo.getSql());
+			LoggerUtil.loggerdebug(DbSession.class , "获取到的sql语句：{}" , sqlInfo.getSql());
 			if(sqlInfo != null) {
 				ResultSet resultSet = executeSql(sqlInfo.getSql() , sqlInfo.getValueList());
 				return packageResultSetToList(resultSet);
 			}else {
-			    logger.error("没有配置该id的sql语句");
+				LoggerUtil.loggerError(DbSession.class ,"没有配置该id的sql语句",null);
 			}
 			return null;
 	}
@@ -134,7 +131,7 @@ public class DbSession{
 				ResultSet resultSet = preparedStatement.executeQuery();
 				return resultSet;
 			} catch (Exception e) {
-				logger.error("执行sql出错，出错信息：{}" , e);
+				LoggerUtil.loggerError(DbSession.class , "执行sql出错，出错信息：{}" , e);
 			}
 			return null;
 	}
@@ -147,7 +144,7 @@ public class DbSession{
 						results.add(toMapObject(resultSet));
 					}
 				} catch (SQLException e) {
-					logger.error("结果集解析出错，出错信息：{}" , e);
+					LoggerUtil.loggerError(DbSession.class ,"结果集解析出错，出错信息：{}" , e);
 				}finally {
 					close();
 				}
@@ -174,7 +171,7 @@ public class DbSession{
 						  count = resultSet.getInt(1);
 					}
 				} catch (SQLException e) {
-					 logger.error("计数结果集解析出错，出错信息：{}" , e);
+					 LoggerUtil.loggerError(DbSession.class ,"计数结果集解析出错，出错信息：{}" , e);
 				}
 				return count;
 			}
@@ -200,7 +197,7 @@ public class DbSession{
 				 return results;
 		    } catch (SQLException e) {
 			    rollBack();
-			    logger.error("批量更新数据出错，出错信息为：{}" , e);
+			    LoggerUtil.loggerError(DbSession.class,"批量更新数据出错，出错信息为：{}" , e);
 			    return null;
 		    }finally {
 				close();
