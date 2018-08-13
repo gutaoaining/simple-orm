@@ -60,7 +60,4 @@ public class DbPage {
 	public void setCurPageData(List<Map> curPageData) {
 		this.curPageData = curPageData;
 	}
-	
-	
-	
 }

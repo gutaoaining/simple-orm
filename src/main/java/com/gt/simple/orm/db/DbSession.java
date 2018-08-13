@@ -74,7 +74,7 @@ public class DbSession{
 			SqlInfo sqlInfo = DBSqlCatch.getSqlInfo(sqlId , map);
 			LoggerUtil.loggerdebug(DbSession.class , "获取到的sql语句：{}" , sqlInfo.getSql());
 			if(sqlInfo != null) {
-				ResultSet resultSet = executeSql(sqlInfo.getSql() , sqlInfo.getValueList());
+				ResultSet resultSet = executeQuerySql(sqlInfo.getSql() , sqlInfo.getValueList());
 				return packageResultSetToList(resultSet);
 			}else {
 				LoggerUtil.loggerError(DbSession.class ,"没有配置该id的sql语句",null);
@@ -96,8 +96,7 @@ public class DbSession{
 		}else if(dbType == DATASOURCETYPE.MYSQL) {
 			
 		}
-		System.out.println(sqlBuffer.toString()+","+sqlInfo.getValueList());
-		return packageResultSetToList(executeSql(sqlBuffer.toString() , sqlInfo.getValueList()));
+		return packageResultSetToList(executeQuerySql(sqlBuffer.toString() , sqlInfo.getValueList()));
 	}
 	
 	public DbPage queryDbPage(String sqlId , Map params , int pageNum , int rows) {
@@ -108,7 +107,7 @@ public class DbSession{
         sqlBuffer.append(" select count(1) from ( ");
         sqlBuffer.append(sqlInfo.getSql());
 		sqlBuffer.append(" )");
-        int totalRows = packageResultSetToInt(executeSql(sqlBuffer.toString() , sqlInfo.getValueList()));
+        int totalRows = packageResultSetToInt(executeQuerySql(sqlBuffer.toString() , sqlInfo.getValueList()));
         DbPage dbPage = new DbPage(totalRows, rows);
         List resultList = queryList(sqlId, params, startIndex, rows);
         dbPage.setCurPageData(resultList);
@@ -121,11 +120,11 @@ public class DbSession{
 	
 	public int queryInt(String sqlId , Map params) {
 			SqlInfo sqlInfo = DBSqlCatch.getSqlInfo(sqlId , params);
-			ResultSet resultSet = executeSql(sqlInfo.getSql() , sqlInfo.getValueList());
+			ResultSet resultSet = executeQuerySql(sqlInfo.getSql() , sqlInfo.getValueList());
 			return packageResultSetToInt(resultSet);
 	}
 
-	private ResultSet executeSql(String sql , List params){
+	private ResultSet executeQuerySql(String sql , List params){
 			try {
 				PreparedStatement preparedStatement = ConnManager.cretePreparedStatement(connection, sql ,params);
 				ResultSet resultSet = preparedStatement.executeQuery();
@@ -135,6 +134,17 @@ public class DbSession{
 			}
 			return null;
 	}
+	
+	private int executeUpdateSql(String sql , List params){
+		try {
+			PreparedStatement preparedStatement = ConnManager.cretePreparedStatement(connection, sql ,params);
+			int count = preparedStatement.executeUpdate();
+			return count;
+		} catch (Exception e) {
+			LoggerUtil.loggerError(DbSession.class , "执行sql出错，出错信息：{}" , e);
+		}
+		return 0;
+}
 
 	private List packageResultSetToList(ResultSet resultSet) {
 			if(resultSet != null) {
@@ -178,6 +188,15 @@ public class DbSession{
 			return 0;
 	}
 	
+	public int updateData(String sqlId , Map params) {
+		SqlInfo sqlInfo = DBSqlCatch.getSqlInfo(sqlId , params);
+		if(sqlInfo != null && sqlInfo.getSql() != null && !"".equals(sqlInfo.getSql())) {
+			return executeUpdateSql(sqlInfo.getSql(), sqlInfo.getValueList());
+		}
+		LoggerUtil.loggerError(DbSession.class, "更新时sql信息为空！", "");
+		return 0;
+	}
+	
 	public int[] updateBatch(String sqlId ,List<Map<String,Object>> args){
 			beginTrans();
 			PreparedStatement preparedStatement = null;
@@ -188,7 +207,7 @@ public class DbSession{
 					for (int i = 0 ; i < args.size() ; i++) {
 						Map<String,Object> params = args.get(i);
 						SqlInfo sqlInfoTemp = DBSqlCatch.getSqlInfo(sqlId , params);
-						ConnManager.setPrepareStatement(sqlInfoTemp.getValueList(), preparedStatement);
+						ConnManager.setPrepareStatementParams(sqlInfoTemp.getValueList(), preparedStatement);
 						preparedStatement.addBatch();
 					}
 			     }

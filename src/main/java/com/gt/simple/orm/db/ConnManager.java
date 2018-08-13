@@ -84,13 +84,13 @@ public class ConnManager {
 	public static PreparedStatement cretePreparedStatement(Connection connection ,String sql ,List params) {
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
-			return setPrepareStatement(params, preparedStatement);
+			return setPrepareStatementParams(params, preparedStatement);
 		} catch (SQLException e) {
 			throw new JdbcException(e);
 		}
 	}
 
-	public static PreparedStatement setPrepareStatement(List params, PreparedStatement preparedStatement)
+	public static PreparedStatement setPrepareStatementParams(List params, PreparedStatement preparedStatement)
 			throws SQLException {
 		if(params != null && params.size() > 0) {
 			for (int i = 1 ; i <= params.size() ; i++) {
