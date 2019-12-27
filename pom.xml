@@ -3,9 +3,11 @@
   <groupId>com.gt</groupId>
   <artifactId>simple-orm</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-        <properties>   
-        <java.version>1.8</java.version>    
-    </properties>   
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
+	</properties>
   	<dependencies>
 	    <dependency>
 	        <groupId>com.zaxxer</groupId>
@@ -45,7 +47,7 @@
 			<dependency>
 			    <groupId>DOM4J</groupId>
 			    <artifactId>dom4j</artifactId>
-			    <version>1.6</version>
+			    <version>1.6.1</version>
 			</dependency>
   		</dependencies>
 </project>
