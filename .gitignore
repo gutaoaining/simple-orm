@@ -30,3 +30,14 @@ hs_err_pid*
 *.iws
 *.iml
 *.ipr
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### STS ###
+.apt_generated
+.factorypath
+.springBeans
+.sts4-cache
+
+### LOGS
+/logs/*

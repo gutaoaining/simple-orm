@@ -17,9 +17,9 @@ import com.gt.simple.orm.util.LoggerUtil;
 /**
  * 
 * @ClassName: DataSession 
-* @Description:数据访问会话实例
+* @Description:???????????
 * @author gt 
-* @date 2018年2月5日 下午6:03:11 
+* @date 2018??2??5?? ????6:03:11 
 *
  */
 public class DbSession{
@@ -41,7 +41,7 @@ public class DbSession{
 				dbType = DATASOURCETYPE.MYSQL;
 			}
 		} catch (SQLException e) {
-			LoggerUtil.loggerError(DbSession.class, "设置数据库类别出错，错误信息为：{}" ,e);
+			LoggerUtil.loggerError(DbSession.class, "?????????????????????????{}" ,e);
 		}
 	}
 
@@ -72,12 +72,12 @@ public class DbSession{
 
 	public List<Order> queryList(String sqlId, Map map){
 			SqlInfo sqlInfo = DBSqlCatch.getSqlInfo(sqlId , map);
-			LoggerUtil.loggerdebug(DbSession.class , "获取到的sql语句：{}" , sqlInfo.getSql());
+			LoggerUtil.loggerdebug(DbSession.class , "???????sql???{}" , sqlInfo.getSql());
 			if(sqlInfo != null) {
 				ResultSet resultSet = executeQuerySql(sqlInfo.getSql() , sqlInfo.getValueList());
 				return packageResultSetToList(resultSet);
 			}else {
-				LoggerUtil.loggerError(DbSession.class ,"没有配置该id的sql语句",null);
+				LoggerUtil.loggerError(DbSession.class ,"????????id??sql???",null);
 			}
 			return null;
 	}
@@ -130,7 +130,7 @@ public class DbSession{
 				ResultSet resultSet = preparedStatement.executeQuery();
 				return resultSet;
 			} catch (Exception e) {
-				LoggerUtil.loggerError(DbSession.class , "执行sql出错，出错信息：{}" , e);
+				LoggerUtil.loggerError(DbSession.class , "???sql?????????????{}" , e);
 			}
 			return null;
 	}
@@ -141,7 +141,7 @@ public class DbSession{
 			int count = preparedStatement.executeUpdate();
 			return count;
 		} catch (Exception e) {
-			LoggerUtil.loggerError(DbSession.class , "执行sql出错，出错信息：{}" , e);
+			LoggerUtil.loggerError(DbSession.class , "???sql?????????????{}" , e);
 		}
 		return 0;
 }
@@ -154,7 +154,7 @@ public class DbSession{
 						results.add(toMapObject(resultSet));
 					}
 				} catch (SQLException e) {
-					LoggerUtil.loggerError(DbSession.class ,"结果集解析出错，出错信息：{}" , e);
+					LoggerUtil.loggerError(DbSession.class ,"??????????????????????{}" , e);
 				}finally {
 					close();
 				}
@@ -181,7 +181,7 @@ public class DbSession{
 						  count = resultSet.getInt(1);
 					}
 				} catch (SQLException e) {
-					 LoggerUtil.loggerError(DbSession.class ,"计数结果集解析出错，出错信息：{}" , e);
+					 LoggerUtil.loggerError(DbSession.class ,"??????????????????????????{}" , e);
 				}
 				return count;
 			}
@@ -193,7 +193,7 @@ public class DbSession{
 		if(sqlInfo != null && sqlInfo.getSql() != null && !"".equals(sqlInfo.getSql())) {
 			return executeUpdateSql(sqlInfo.getSql(), sqlInfo.getValueList());
 		}
-		LoggerUtil.loggerError(DbSession.class, "更新时sql信息为空！", "");
+		LoggerUtil.loggerError(DbSession.class, "?????sql???????", "");
 		return 0;
 	}
 	
@@ -216,7 +216,7 @@ public class DbSession{
 				 return results;
 		    } catch (SQLException e) {
 			    rollBack();
-			    LoggerUtil.loggerError(DbSession.class,"批量更新数据出错，出错信息为：{}" , e);
+			    LoggerUtil.loggerError(DbSession.class,"?????????????????????????{}" , e);
 			    return null;
 		    }finally {
 				close();
