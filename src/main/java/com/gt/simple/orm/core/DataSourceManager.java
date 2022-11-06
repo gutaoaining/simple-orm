@@ -14,7 +14,7 @@ public class DataSourceManager {
 	/**
 	 * 数据源配置文件名称
 	 */
-	private static final String DATASOURCEFILENAME = "datasource.xml";
+	private static final String DATASOURCE_FILE_NAME = "datasource.xml";
 	
 	/**
 	 * 数据源缓存
@@ -29,7 +29,7 @@ public class DataSourceManager {
 	* @throws
 	 */
 	public static void initDataSource() {
-		  List<DataSource> dataSources = new DatasourceXmlParser().XMLDataSourceConfigParser(DATASOURCEFILENAME);
+		  List<DataSource> dataSources = new DatasourceXmlParser().XMLDataSourceConfigParser(DATASOURCE_FILE_NAME);
 		  if(dataSources != null && dataSources.size() > 0) {
 			  for (DataSource dataSource : dataSources) {
 				HikariDataSource hikariDataSource = new HikariDataSource(getHikariConfig(dataSource));
