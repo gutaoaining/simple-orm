@@ -25,8 +25,7 @@ public class DataSourceManager {
 	 * 
 	* @Title: 初始化数据源 
 	* @Description: TODO(初始化数据源 ) 
-	* @param     设定文件 
-	* @return void    返回类型 
+	* @return void    返回类型
 	* @throws
 	 */
 	public static void initDataSource() {
